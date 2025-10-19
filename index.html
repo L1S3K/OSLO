@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trip Cost Calculator (€ → PLN)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      color: #333;
-      max-width: 750px;
+      max-width: 800px;
       margin: 40px auto;
       padding: 20px;
+      background: #f8f9fa;
+      color: #333;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    h2 {
-      text-align: center;
-    }
+    h2 { text-align: center; }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -37,30 +35,16 @@
       padding: 4px;
       border-radius: 4px;
       border: 1px solid #ccc;
+      text-align: right;
     }
     select, input[type="text"], input[type="number"] {
       width: 100%;
       box-sizing: border-box;
     }
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      border: none;
-      color: white;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
     #result {
       margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
-      text-align: center;
       white-space: pre-line;
     }
   </style>
@@ -68,44 +52,44 @@
 <body>
   <h2>Trip Cost Calculator (€ → PLN)</h2>
 
-  <label for="numPeople"><strong>Number of People:</strong></label>
-  <input type="number" id="numPeople" placeholder="Enter number of people" min="1" value="1">
+  <label><strong>Number of People:</strong></label>
+  <input type="number" id="numPeople" min="1" value="1">
 
   <label for="exchangeRate"><strong>Exchange Rate (1 € = PLN):</strong></label>
-  <input type="number" id="exchangeRate" placeholder="e.g. 4.5" step="0.01" value="4.50">
+  <input type="number" id="exchangeRate" step="0.01" value="4.50">
 
   <h3>Departure Options</h3>
   <table>
     <tr><th>Departure</th><th>Ticket Price (€)</th></tr>
-    <tr><td>26.12 11:00</td><td><input type="number" id="dep2611" placeholder="0"></td></tr>
-    <tr><td>27.12 07:05</td><td><input type="number" id="dep2707" placeholder="0"></td></tr>
-    <tr><td>28.12 07:05</td><td><input type="number" id="dep2807" placeholder="0"></td></tr>
-    <tr><td>28.12 10:15</td><td><input type="number" id="dep2810" placeholder="0"></td></tr>
+    <tr><td>26.12 11:00</td><td><input type="number" id="dep2611" value="27"></td></tr>
+    <tr><td>27.12 07:05</td><td><input type="number" id="dep2707" value="30"></td></tr>
+    <tr><td>28.12 07:05</td><td><input type="number" id="dep2807" value="44"></td></tr>
+    <tr><td>28.12 10:15</td><td><input type="number" id="dep2810" value="62"></td></tr>
   </table>
 
   <label for="departureSelect" style="margin-top:10px; display:block;">Select Departure:</label>
   <select id="departureSelect">
-    <option value="dep2611">26.12 11:00</option>
-    <option value="dep2707">27.12 07:05</option>
-    <option value="dep2807">28.12 07:05</option>
-    <option value="dep2810">28.12 10:15</option>
+    <option value="dep2611" data-date="2025-12-26T11:00">26.12 11:00</option>
+    <option value="dep2707" data-date="2025-12-27T07:05">27.12 07:05</option>
+    <option value="dep2807" data-date="2025-12-28T07:05">28.12 07:05</option>
+    <option value="dep2810" data-date="2025-12-28T10:15">28.12 10:15</option>
   </select>
 
   <h3>Return Options</h3>
   <table>
     <tr><th>Return</th><th>Ticket Price (€)</th></tr>
-    <tr><td>02.01 13:35</td><td><input type="number" id="ret0213" placeholder="0"></td></tr>
-    <tr><td>03.01 09:30</td><td><input type="number" id="ret0309" placeholder="0"></td></tr>
-    <tr><td>04.01 09:40</td><td><input type="number" id="ret0409" placeholder="0"></td></tr>
-    <tr><td>04.01 12:40</td><td><input type="number" id="ret0412" placeholder="0"></td></tr>
+    <tr><td>02.01 13:35</td><td><input type="number" id="ret0213" value="52"></td></tr>
+    <tr><td>03.01 09:30</td><td><input type="number" id="ret0309" value="66"></td></tr>
+    <tr><td>04.01 09:40</td><td><input type="number" id="ret0409" value="18"></td></tr>
+    <tr><td>04.01 12:40</td><td><input type="number" id="ret0412" value="37"></td></tr>
   </table>
 
   <label for="returnSelect" style="margin-top:10px; display:block;">Select Return:</label>
   <select id="returnSelect">
-    <option value="ret0213">02.01 13:35</option>
-    <option value="ret0309">03.01 09:30</option>
-    <option value="ret0409">04.01 09:40</option>
-    <option value="ret0412">04.01 12:40</option>
+    <option value="ret0213" data-date="2026-01-02T13:35">02.01 13:35</option>
+    <option value="ret0309" data-date="2026-01-03T09:30">03.01 09:30</option>
+    <option value="ret0409" data-date="2026-01-04T09:40">04.01 09:40</option>
+    <option value="ret0412" data-date="2026-01-04T12:40">04.01 12:40</option>
   </select>
 
   <h3>Car Rental</h3>
@@ -116,58 +100,68 @@
   <label for="hotelCost">Hotel Cost (PLN):</label>
   <input type="number" id="hotelCost" placeholder="Enter total hotel cost">
 
-  <button onclick="calculateTotal()">Calculate Total Cost</button>
-
   <div id="result"></div>
 
   <script>
-    function calculateTotal() {
-      const numPeople = parseInt(document.getElementById('numPeople').value) || 1;
-      const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 4.5;
+    function calculateDays(depDateStr, retDateStr) {
+      const dep = new Date(depDateStr);
+      const ret = new Date(retDateStr);
+      const diff = ret - dep;
+      return Math.max(1, diff / (1000 * 60 * 60 * 24));
+    }
 
-      const depKey = document.getElementById('departureSelect').value;
-      const retKey = document.getElementById('returnSelect').value;
+    function calculateTotal() {
+      const numPeople = parseInt(document.getElementById("numPeople").value) || 1;
+      const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 4.5;
+
+      const depSelect = document.getElementById("departureSelect");
+      const retSelect = document.getElementById("returnSelect");
+
+      const depKey = depSelect.value;
+      const retKey = retSelect.value;
+      const depDateStr = depSelect.selectedOptions[0].dataset.date;
+      const retDateStr = retSelect.selectedOptions[0].dataset.date;
 
       const depEuro = parseFloat(document.getElementById(depKey).value) || 0;
       const retEuro = parseFloat(document.getElementById(retKey).value) || 0;
+      const carRatePLN = parseFloat(document.getElementById("carRate").value) || 0;
+      const hotelCostPLN = parseFloat(document.getElementById("hotelCost").value) || 0;
 
-      const carRatePLN = parseFloat(document.getElementById('carRate').value) || 0;
-      const hotelCostPLN = parseFloat(document.getElementById('hotelCost').value) || 0;
-
-      // Estimate trip duration based on dates (Dec → Jan)
-      const depDay = parseInt(depKey.substring(3,5)); // e.g. "26" from dep2611
-      const retDay = parseInt(retKey.substring(3,5)); // e.g. "02" from ret0213
-      let tripDays = retDay + (31 - depDay); // December has 31 days
-      if (tripDays <= 0) tripDays = 1;
-
-      // Ticket totals
+      const tripDays = calculateDays(depDateStr, retDateStr);
       const depTotalEuro = depEuro * numPeople;
       const retTotalEuro = retEuro * numPeople;
       const depTotalPLN = depTotalEuro * exchangeRate;
       const retTotalPLN = retTotalEuro * exchangeRate;
-
-      // Other totals
       const carRentalPLN = tripDays * carRatePLN;
       const totalPLN = depTotalPLN + retTotalPLN + carRentalPLN + hotelCostPLN;
       const perPersonPLN = totalPLN / numPeople;
 
-      const depLabel = document.querySelector(`#departureSelect option[value="${depKey}"]`).textContent;
-      const retLabel = document.querySelector(`#returnSelect option[value="${retKey}"]`).textContent;
+      const depLabel = depSelect.selectedOptions[0].textContent;
+      const retLabel = retSelect.selectedOptions[0].textContent;
 
-      document.getElementById('result').innerText =
-`Trip Duration: ${tripDays} days
+      document.getElementById("result").innerText =
+`Trip Duration: ${tripDays.toFixed(1)} days
 People: ${numPeople}
-Exchange Rate: 1 € = ${exchangeRate.toFixed(2)} PLN
+Exchange Rate: 1 € = ${exchangeRate.toFixed(4)} PLN
 
 Departure (${depLabel}): €${depEuro.toFixed(2)} × ${numPeople} = €${depTotalEuro.toFixed(2)} = ${depTotalPLN.toFixed(2)} PLN
 Return (${retLabel}): €${retEuro.toFixed(2)} × ${numPeople} = €${retTotalEuro.toFixed(2)} = ${retTotalPLN.toFixed(2)} PLN
-Car Rental (${tripDays} days @ ${carRatePLN.toFixed(2)} PLN): ${carRentalPLN.toFixed(2)} PLN
+Car Rental (${tripDays.toFixed(1)} days @ ${carRatePLN.toFixed(2)} PLN): ${carRentalPLN.toFixed(2)} PLN
 Hotel: ${hotelCostPLN.toFixed(2)} PLN
 
 ---------------------------------
 Total Trip Cost: ${totalPLN.toFixed(2)} PLN
 Cost per Person: ${perPersonPLN.toFixed(2)} PLN`;
     }
+
+    // Auto-recalculate whenever something changes
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("input", calculateTotal);
+      el.addEventListener("change", calculateTotal);
+    });
+
+    // Initial calculation
+    calculateTotal();
   </script>
 </body>
 </html>
