@@ -103,65 +103,88 @@
   <div id="result"></div>
 
   <script>
-    function calculateDays(depDateStr, retDateStr) {
-      const dep = new Date(depDateStr);
-      const ret = new Date(retDateStr);
-      const diff = ret - dep;
-      return Math.max(1, diff / (1000 * 60 * 60 * 24));
+function calculateDays(depDateStr, retDateStr) {
+  const dep = new Date(depDateStr);
+  const ret = new Date(retDateStr);
+  const diff = ret - dep;
+  return Math.max(1, diff / (1000 * 60 * 60 * 24));
+}
+
+function calculateCarDays(depDateStr, retDateStr) {
+  const dep = new Date(depDateStr);
+  const ret = new Date(retDateStr);
+
+  // Define the "free car rental period" (28.12 → 02.01)
+  const freeStart = new Date("2025-12-28T00:00");
+  const freeEnd = new Date("2026-01-02T00:00");
+
+  let totalDays = 0;
+
+  // Count each day of the trip, skipping free period
+  let current = new Date(dep);
+  while (current < ret) {
+    if (current < freeStart || current >= freeEnd) {
+      totalDays += 1;
     }
+    current.setDate(current.getDate() + 1);
+  }
+  return totalDays;
+}
 
-    function calculateTotal() {
-      const numPeople = parseInt(document.getElementById("numPeople").value) || 1;
-      const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 4.5;
+function calculateTotal() {
+  const numPeople = parseInt(document.getElementById("numPeople").value) || 1;
+  const exchangeRate = parseFloat(document.getElementById("exchangeRate").value) || 4.5;
 
-      const depSelect = document.getElementById("departureSelect");
-      const retSelect = document.getElementById("returnSelect");
+  const depSelect = document.getElementById("departureSelect");
+  const retSelect = document.getElementById("returnSelect");
 
-      const depKey = depSelect.value;
-      const retKey = retSelect.value;
-      const depDateStr = depSelect.selectedOptions[0].dataset.date;
-      const retDateStr = retSelect.selectedOptions[0].dataset.date;
+  const depKey = depSelect.value;
+  const retKey = retSelect.value;
+  const depDateStr = depSelect.selectedOptions[0].dataset.date;
+  const retDateStr = retSelect.selectedOptions[0].dataset.date;
 
-      const depEuro = parseFloat(document.getElementById(depKey).value) || 0;
-      const retEuro = parseFloat(document.getElementById(retKey).value) || 0;
-      const carRatePLN = parseFloat(document.getElementById("carRate").value) || 0;
-      const hotelCostPLN = parseFloat(document.getElementById("hotelCost").value) || 0;
+  const depEuro = parseFloat(document.getElementById(depKey).value) || 0;
+  const retEuro = parseFloat(document.getElementById(retKey).value) || 0;
+  const carRatePLN = parseFloat(document.getElementById("carRate").value) || 0;
+  const hotelCostPLN = parseFloat(document.getElementById("hotelCost").value) || 0;
 
-      const tripDays = calculateDays(depDateStr, retDateStr);
-      const depTotalEuro = depEuro * numPeople;
-      const retTotalEuro = retEuro * numPeople;
-      const depTotalPLN = depTotalEuro * exchangeRate;
-      const retTotalPLN = retTotalEuro * exchangeRate;
-      const carRentalPLN = tripDays * carRatePLN;
-      const totalPLN = depTotalPLN + retTotalPLN + carRentalPLN + hotelCostPLN;
-      const perPersonPLN = totalPLN / numPeople;
+  const tripDays = calculateDays(depDateStr, retDateStr);
+  const carRentalDays = calculateCarDays(depDateStr, retDateStr);
 
-      const depLabel = depSelect.selectedOptions[0].textContent;
-      const retLabel = retSelect.selectedOptions[0].textContent;
+  const depTotalEuro = depEuro * numPeople;
+  const retTotalEuro = retEuro * numPeople;
+  const depTotalPLN = depTotalEuro * exchangeRate;
+  const retTotalPLN = retTotalEuro * exchangeRate;
+  const carRentalPLN = carRentalDays * carRatePLN;
+  const totalPLN = depTotalPLN + retTotalPLN + carRentalPLN + hotelCostPLN;
+  const perPersonPLN = totalPLN / numPeople;
 
-      document.getElementById("result").innerText =
+  const depLabel = depSelect.selectedOptions[0].textContent;
+  const retLabel = retSelect.selectedOptions[0].textContent;
+
+  document.getElementById("result").innerText =
 `Trip Duration: ${tripDays.toFixed(1)} days
 People: ${numPeople}
 Exchange Rate: 1 € = ${exchangeRate.toFixed(4)} PLN
 
 Departure (${depLabel}): €${depEuro.toFixed(2)} × ${numPeople} = €${depTotalEuro.toFixed(2)} = ${depTotalPLN.toFixed(2)} PLN
 Return (${retLabel}): €${retEuro.toFixed(2)} × ${numPeople} = €${retTotalEuro.toFixed(2)} = ${retTotalPLN.toFixed(2)} PLN
-Car Rental (${tripDays.toFixed(1)} days @ ${carRatePLN.toFixed(2)} PLN): ${carRentalPLN.toFixed(2)} PLN
+Car Rental (${carRentalDays.toFixed(1)} chargeable days @ ${carRatePLN.toFixed(2)} PLN): ${carRentalPLN.toFixed(2)} PLN
 Hotel: ${hotelCostPLN.toFixed(2)} PLN
 
 ---------------------------------
 Total Trip Cost: ${totalPLN.toFixed(2)} PLN
 Cost per Person: ${perPersonPLN.toFixed(2)} PLN`;
-    }
+}
 
-    // Auto-recalculate whenever something changes
-    document.querySelectorAll("input, select").forEach(el => {
-      el.addEventListener("input", calculateTotal);
-      el.addEventListener("change", calculateTotal);
-    });
+// Auto-update totals
+document.querySelectorAll("input, select").forEach(el => {
+  el.addEventListener("input", calculateTotal);
+  el.addEventListener("change", calculateTotal);
+});
 
-    // Initial calculation
-    calculateTotal();
-  </script>
+// Initial calculation
+calculateTotal();
+</script>
 </body>
 </html>
